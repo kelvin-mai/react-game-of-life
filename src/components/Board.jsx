@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import Grid from './Grid.jsx';
 
 class Board extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			rows: 30,
-			columns: 50,
+			columns: 30,
 			grid: [],
 			intervalId: 0
 		};
@@ -95,14 +96,14 @@ class Board extends Component {
 	}
 
 	render() {
-		const { grid } = this.state;
+		const { grid, columns, rows } = this.state;
 		return (
 			<div>
 				<button onClick={this.step}>Step</button>
 				<button onClick={this.seed}>Randomize</button>
 				<button onClick={this.play}>Play</button>
 				<button onClick={this.pause}>Pause</button>
-				<p>{JSON.stringify(grid)}</p>
+				<Grid grid={grid} columns={columns} rows={rows} />
 			</div>
 		);
 	}

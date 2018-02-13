@@ -1,0 +1,32 @@
+import React, { Component } from 'react';
+
+export default class Grid extends Component {
+	render() {
+		const { grid, columns, rows } = this.props;
+		let display = grid.map((row, j) =>
+			row.map((col, i) => (
+				<div className={`Cell ${grid[i][j] ? 'isActive' : ''}`} />
+			))
+		);
+
+		// for (let i = 0; i < columns; i++) {
+		// 	for (let j = 0; j < rows; j++) {
+		// 		display[i][j] = (
+		// 			<div className={`Cell ${display[i][j] === 1 ? 'isActive' : ''}`} />
+		// 		);
+		// 	}
+		// }
+
+		return (
+			<div
+				style={{
+					width: this.props.columns * 14,
+					margin: 0,
+					padding: 0,
+					lineHeight: 0
+				}}>
+				{display}
+			</div>
+		);
+	}
+}

@@ -13,6 +13,9 @@ body {
 	border: 1px solid black;
 	width: 15px;
 	height: 15px;
-	margin-left: -1px;
-	margin-bottom: -1px;
+	margin: -1px;
+}
+
+.Cell.isActive {
+	background-color: #000;
 }
