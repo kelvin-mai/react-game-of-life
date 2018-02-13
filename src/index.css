@@ -1,5 +1,18 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.Cell {
+	display: inline-block;
+	border: 1px solid black;
+	width: 15px;
+	height: 15px;
+	margin-left: -1px;
+	margin-bottom: -1px;
 }

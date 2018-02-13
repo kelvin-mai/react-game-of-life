@@ -1,26 +1,20 @@
 import React, { Component } from 'react';
-import Grid from './Grid.jsx';
-
-// const dataset = [
-// 	[0, 1, 0, 1, 0],
-// 	[1, 1, 1, 0, 0],
-// 	[1, 0, 1, 1, 1],
-// 	[0, 0, 0, 1, 0],
-// 	[1, 0, 1, 1, 0]
-// ];
 
 class Board extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			rows: 5,
-			columns: 5,
-			grid: []
+			rows: 30,
+			columns: 50,
+			grid: [],
+			intervalId: 0
 		};
 		this.makeGrid = this.makeGrid.bind(this);
 		this.step = this.step.bind(this);
-		this.countNeighbors = this.countNeighbors.bind(this);
+		this.count = this.count.bind(this);
 		this.seed = this.seed.bind(this);
+		this.play = this.play.bind(this);
+		this.pause = this.pause.bind(this);
 	}
 
 	componentDidMount() {
@@ -47,16 +41,14 @@ class Board extends Component {
 		let next = this.makeGrid();
 		const { grid, columns, rows } = this.state;
 
-		// compute next grid
 		for (let i = 0; i < columns; i++) {
 			for (let j = 0; j < rows; j++) {
 				let state = grid[i][j];
-				// count live neighbors
-				let neighbors = this.countNeighbors(grid, i, j);
+				let neighbors = this.count(grid, i, j);
 
-				if (state == 0 && neighbors == 3) {
+				if (state === 0 && neighbors === 3) {
 					next[i][j] = 1;
-				} else if (state == 1 && (neighbors < 2 || neighbors > 3)) {
+				} else if (state === 1 && (neighbors < 2 || neighbors > 3)) {
 					next[i][j] = 0;
 				} else {
 					next[i][j] = state;
@@ -66,7 +58,7 @@ class Board extends Component {
 		this.setState({ grid: next });
 	}
 
-	countNeighbors(grid, x, y) {
+	count(grid, x, y) {
 		const { columns, rows } = this.state;
 		let sum = 0;
 		for (let i = -1; i < 2; i++) {
@@ -83,7 +75,6 @@ class Board extends Component {
 	}
 
 	seed() {
-		console.log('random');
 		const { columns, rows, grid } = this.state;
 		for (let i = 0; i < columns; i++) {
 			for (let j = 0; j < rows; j++) {
@@ -93,14 +84,25 @@ class Board extends Component {
 		this.setState({ grid });
 	}
 
+	play() {
+		clearInterval(this.state.intervalId);
+		const intervalId = setInterval(this.step, 100);
+		this.setState({ intervalId });
+	}
+
+	pause() {
+		clearInterval(this.state.intervalId);
+	}
+
 	render() {
-		const { columns, rows, grid } = this.state;
+		const { grid } = this.state;
 		return (
 			<div>
-				<p>{JSON.stringify(grid)}</p>
-				{/* <Grid columns={columns} rows={rows} grid={grid} /> */}
 				<button onClick={this.step}>Step</button>
-				<button onClick={this.seed}>Seed</button>
+				<button onClick={this.seed}>Randomize</button>
+				<button onClick={this.play}>Play</button>
+				<button onClick={this.pause}>Pause</button>
+				<p>{JSON.stringify(grid)}</p>
 			</div>
 		);
 	}
