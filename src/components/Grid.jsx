@@ -19,11 +19,9 @@ export default class Grid extends Component {
 
 		return (
 			<div
+				className="Grid"
 				style={{
-					width: this.props.columns * 14,
-					margin: 0,
-					padding: 0,
-					lineHeight: 0
+					width: this.props.columns * 14
 				}}>
 				{display}
 			</div>
