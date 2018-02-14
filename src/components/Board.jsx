@@ -8,7 +8,8 @@ class Board extends Component {
 			rows: 30,
 			columns: 30,
 			grid: [],
-			intervalId: 0
+			intervalId: 0,
+			generation: 0
 		};
 		this.makeGrid = this.makeGrid.bind(this);
 		this.step = this.step.bind(this);
@@ -16,17 +17,12 @@ class Board extends Component {
 		this.seed = this.seed.bind(this);
 		this.play = this.play.bind(this);
 		this.pause = this.pause.bind(this);
+		this.toggleCell = this.toggleCell.bind(this);
+		this.reset = this.reset.bind(this);
 	}
 
 	componentDidMount() {
-		const { columns, rows } = this.state;
-		let grid = this.makeGrid();
-		for (let i = 0; i < columns; i++) {
-			for (let j = 0; j < rows; j++) {
-				grid[i][j] = 0;
-			}
-		}
-		this.setState({ grid });
+		this.reset();
 	}
 
 	makeGrid() {
@@ -40,7 +36,7 @@ class Board extends Component {
 
 	step() {
 		let next = this.makeGrid();
-		const { grid, columns, rows } = this.state;
+		const { grid, columns, rows, generation } = this.state;
 
 		for (let i = 0; i < columns; i++) {
 			for (let j = 0; j < rows; j++) {
@@ -56,7 +52,7 @@ class Board extends Component {
 				}
 			}
 		}
-		this.setState({ grid: next });
+		this.setState({ grid: next, generation: generation + 1 });
 	}
 
 	count(grid, x, y) {
@@ -95,15 +91,39 @@ class Board extends Component {
 		clearInterval(this.state.intervalId);
 	}
 
+	reset() {
+		const { columns, rows } = this.state;
+		let grid = this.makeGrid();
+		for (let i = 0; i < columns; i++) {
+			for (let j = 0; j < rows; j++) {
+				grid[i][j] = 0;
+			}
+		}
+		this.setState({ grid, generation: 0 });
+	}
+
+	toggleCell(x, y) {
+		const { grid } = this.state;
+		grid[x][y] = grid[x][y] ? 0 : 1;
+		this.setState({ grid });
+	}
+
 	render() {
-		const { grid, columns, rows } = this.state;
+		const { grid, columns, rows, generation } = this.state;
 		return (
-			<div>
+			<div style={{ textAlign: 'center' }}>
 				<button onClick={this.step}>Step</button>
 				<button onClick={this.seed}>Randomize</button>
 				<button onClick={this.play}>Play</button>
 				<button onClick={this.pause}>Pause</button>
-				<Grid grid={grid} columns={columns} rows={rows} />
+				<button onClick={this.reset}>Reset</button>
+				<Grid
+					grid={grid}
+					columns={columns}
+					rows={rows}
+					onToggleCell={this.toggleCell}
+				/>
+				<p>Generation: {generation}</p>
 			</div>
 		);
 	}

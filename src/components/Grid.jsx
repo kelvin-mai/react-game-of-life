@@ -2,20 +2,16 @@ import React, { Component } from 'react';
 
 export default class Grid extends Component {
 	render() {
-		const { grid, columns, rows } = this.props;
+		const { grid, columns, rows, onToggleCell } = this.props;
 		let display = grid.map((row, j) =>
 			row.map((col, i) => (
-				<div className={`Cell ${grid[i][j] ? 'isActive' : ''}`} />
+				<div
+					className={`Cell ${grid[i][j] ? 'isActive' : ''}`}
+					onClick={e => onToggleCell(i, j)}
+					key={`${i}_${j}`}
+				/>
 			))
 		);
-
-		// for (let i = 0; i < columns; i++) {
-		// 	for (let j = 0; j < rows; j++) {
-		// 		display[i][j] = (
-		// 			<div className={`Cell ${display[i][j] === 1 ? 'isActive' : ''}`} />
-		// 		);
-		// 	}
-		// }
 
 		return (
 			<div
